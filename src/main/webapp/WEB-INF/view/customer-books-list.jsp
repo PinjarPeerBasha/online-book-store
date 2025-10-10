@@ -287,46 +287,109 @@
                       </div>
                     </c:if>
                     <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                          <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>Name</th>
-                              <th>Category</th>
-                              <th>Available</th>
-                              <th>Price</th>
-                              <th>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <c:forEach var="book" items="${books}">
-                              <!--URL for the add to cart option  -->
-                              <c:url var="addToCartLink" value="/customers/cart/add">
-                                <c:param name="bookId" value="${book.id}" />
-                              </c:url>
-                              <c:url var="removeFromCartLink" value="/customers/cart/remove">
-                                <c:param name="bookId" value="${book.id}" />
-                              </c:url>
-                              <tr>
-                                <td>
-                                  <c:out value="${book.id}" />
-                                </td>
-                                <td>
-                                  <c:out value="${book.name}" />
-                                </td>
-                                <td>
-                                  <c:out value="${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}" />
-                                </td>
-                                <td>
-                                  <c:out value="${book.quantity}" />
-                                </td>
-                                <td>
-                              <strong>INR <c:out value="${book.price}" /></strong>
-                            </td>
+                      <!-- Search and Filter Controls -->
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="input-group">
+                            <input type="text" id="searchBooks" class="form-control" placeholder="Search books...">
+                            <div class="input-group-append">
+                              <button class="btn btn-outline-primary" type="button">
+                                <i class="fas fa-search"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <select id="categoryFilter" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Science">Science</option>
+                            <option value="Technology">Technology</option>
+                            <option value="History">History</option>
+                            <option value="Biography">Biography</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Mystery">Mystery</option>
+                            <option value="Fantasy">Fantasy</option>
+                            <option value="Education">Education</option>
+                            <option value="Self-Help">Self-Help</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <select id="sortBy" class="form-control">
+                            <option value="name">Sort by Name</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="category">Category</option>
+                          </select>
+                        </div>
+                      </div>
 
-                                <td style="color:green;">
-
+                      <!-- Books Grid -->
+                      <div class="row" id="booksContainer">
+                        <c:forEach var="book" items="${books}">
+                          <!--URL for the add to cart option  -->
+                          <c:url var="addToCartLink" value="/customers/cart/add">
+                            <c:param name="bookId" value="${book.id}" />
+                          </c:url>
+                          <c:url var="removeFromCartLink" value="/customers/cart/remove">
+                            <c:param name="bookId" value="${book.id}" />
+                          </c:url>
+                          
+                          <div class="col-lg-3 col-md-4 col-sm-6 mb-4 book-item" 
+                               data-name="${book.name}" 
+                               data-category="${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}"
+                               data-price="${book.price}">
+                            <div class="card book-card h-100 shadow-sm">
+                              <!-- Book Image -->
+                              <div class="book-image-container">
+                                <c:choose>
+                                  <c:when test="${not empty book.imageUrl}">
+                                    <img src="${book.imageUrl}" class="card-img-top book-image" alt="${book.name}" onerror="this.src='https://via.placeholder.com/300x400/f8f9fa/6c757d?text=No+Image'">
+                                  </c:when>
+                                  <c:otherwise>
+                                    <img src="https://via.placeholder.com/300x400/f8f9fa/6c757d?text=Book+Cover" class="card-img-top book-image" alt="Default book cover">
+                                  </c:otherwise>
+                                </c:choose>
+                                <!-- Stock Badge -->
+                                <c:if test="${book.quantity == 0}">
+                                  <span class="badge badge-danger stock-badge">Out of Stock</span>
+                                </c:if>
+                                <c:if test="${book.quantity > 0 && book.quantity <= 5}">
+                                  <span class="badge badge-warning stock-badge">Low Stock</span>
+                                </c:if>
+                              </div>
+                              
+                              <!-- Book Details -->
+                              <div class="card-body d-flex flex-column">
+                                <h6 class="card-title book-title">${book.name}</h6>
+                                <p class="card-text text-muted small mb-2">
+                                  <i class="fas fa-tag"></i> ${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}
+                                </p>
+                                <p class="card-text text-muted small mb-2">
+                                  <i class="fas fa-user"></i> ${book.bookDetail.author != null ? book.bookDetail.author : 'Unknown'}
+                                </p>
+                                <c:if test="${not empty book.bookDetail.description}">
+                                  <p class="card-text book-description small text-muted">
+                                    ${book.bookDetail.description.length() > 80 ? 
+                                      book.bookDetail.description.substring(0, 80).concat('...') : 
+                                      book.bookDetail.description}
+                                  </p>
+                                </c:if>
+                                
+                                <!-- Price and Stock -->
+                                <div class="mt-auto">
+                                  <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="text-success mb-0">
+                                      <strong>INR ${book.price}</strong>
+                                    </h5>
+                                    <small class="text-muted">
+                                      <i class="fas fa-boxes"></i> ${book.quantity} available
+                                    </small>
+                                  </div>
+                                  
+                                  <!-- Action Button -->
                                   <!--Check if the item is already added to cart or not!  -->
                                   <c:set var="contains" value="false" />
                                   <c:forEach var="item" items="${shoppingItems}">
@@ -334,28 +397,52 @@
                                       <c:set var="contains" value="true" />
                                     </c:if>
                                   </c:forEach>
+                                  
                                   <c:choose>
-                                    <c:when test="${contains !=  true}">
-                                      <a href="${addToCartLink}"><input type="button" class="btn btn-success"
-                                          value="Add to Cart"></a>
+                                    <c:when test="${book.quantity == 0}">
+                                      <button class="btn btn-secondary btn-block" disabled>
+                                        <i class="fas fa-times"></i> Out of Stock
+                                      </button>
+                                    </c:when>
+                                    <c:when test="${contains != true}">
+                                      <a href="${addToCartLink}" class="btn btn-success btn-block">
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
+                                      </a>
                                     </c:when>
                                     <c:otherwise>
-                                      <a href="${removeFromCartLink}"><input type="button" class="btn btn-danger"
-                                          value="Remove"></a>
+                                      <a href="${removeFromCartLink}" class="btn btn-danger btn-block">
+                                        <i class="fas fa-trash"></i> Remove from Cart
+                                      </a>
                                     </c:otherwise>
                                   </c:choose>
-                                </td>
-                              </tr>
-                            </c:forEach>
-                          </tbody>
-                        </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </c:forEach>
                       </div>
+                      
+                      <!-- No Books Message -->
+                      <c:if test="${empty books}">
+                        <div class="text-center py-5">
+                          <i class="fas fa-book fa-4x text-muted mb-3"></i>
+                          <h4 class="text-muted">No books available</h4>
+                          <p class="text-muted">Check back later for new arrivals!</p>
+                        </div>
+                      </c:if>
                     </div>
                   </div>
+                  
+                  <!-- Proceed to Cart Message -->
                   <c:if test="${message != null}">
-                    <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary"><a class="btn btn-success"
-                          href="${pageContext.request.contextPath}/customers/cart">Proceed</a></h6>
+                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                      <i class="fas fa-check-circle"></i> ${message}
+                      <a href="${pageContext.request.contextPath}/customers/cart" class="btn btn-success btn-sm ml-3">
+                        <i class="fas fa-shopping-cart"></i> View Cart
+                      </a>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                   </c:if>
                 </div>
@@ -421,6 +508,172 @@
 
           <!-- Page level custom scripts -->
           <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+
+          <!-- Book Grid Custom Styles and Scripts -->
+          <style>
+            .book-card {
+              transition: transform 0.3s ease, box-shadow 0.3s ease;
+              cursor: pointer;
+              border: none;
+              overflow: hidden;
+            }
+            
+            .book-card:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+            }
+            
+            .book-image-container {
+              position: relative;
+              height: 300px;
+              overflow: hidden;
+            }
+            
+            .book-image {
+              height: 100%;
+              object-fit: cover;
+              transition: transform 0.3s ease;
+            }
+            
+            .book-card:hover .book-image {
+              transform: scale(1.05);
+            }
+            
+            .stock-badge {
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              z-index: 10;
+            }
+            
+            .book-title {
+              font-weight: 600;
+              color: #2c3e50;
+              height: 2.4em;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
+            
+            .book-description {
+              height: 3em;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
+            
+            .search-highlight {
+              background-color: #fff3cd;
+              padding: 2px 4px;
+              border-radius: 3px;
+            }
+            
+            @media (max-width: 768px) {
+              .book-image-container {
+                height: 250px;
+              }
+            }
+          </style>
+
+          <script>
+            $(document).ready(function() {
+              // Search functionality
+              $('#searchBooks').on('keyup', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                filterBooks();
+              });
+              
+              // Category filter
+              $('#categoryFilter').on('change', function() {
+                filterBooks();
+              });
+              
+              // Sort functionality
+              $('#sortBy').on('change', function() {
+                sortBooks();
+              });
+              
+              function filterBooks() {
+                var searchTerm = $('#searchBooks').val().toLowerCase();
+                var selectedCategory = $('#categoryFilter').val();
+                
+                $('.book-item').each(function() {
+                  var bookName = $(this).data('name').toLowerCase();
+                  var bookCategory = $(this).data('category');
+                  
+                  var matchesSearch = bookName.includes(searchTerm);
+                  var matchesCategory = selectedCategory === '' || bookCategory === selectedCategory;
+                  
+                  if (matchesSearch && matchesCategory) {
+                    $(this).show();
+                    // Highlight search terms
+                    if (searchTerm) {
+                      var titleElement = $(this).find('.book-title');
+                      var originalText = titleElement.text();
+                      var highlightedText = originalText.replace(new RegExp(searchTerm, 'gi'), '<span class="search-highlight">$&</span>');
+                      titleElement.html(highlightedText);
+                    }
+                  } else {
+                    $(this).hide();
+                  }
+                });
+                
+                // Show no results message
+                var visibleBooks = $('.book-item:visible').length;
+                if (visibleBooks === 0) {
+                  if ($('#noResultsMessage').length === 0) {
+                    $('#booksContainer').append(
+                      '<div id="noResultsMessage" class="col-12 text-center py-5">' +
+                      '<i class="fas fa-search fa-4x text-muted mb-3"></i>' +
+                      '<h4 class="text-muted">No books found</h4>' +
+                      '<p class="text-muted">Try adjusting your search or filter criteria</p>' +
+                      '</div>'
+                    );
+                  }
+                } else {
+                  $('#noResultsMessage').remove();
+                }
+              }
+              
+              function sortBooks() {
+                var sortBy = $('#sortBy').val();
+                var booksContainer = $('#booksContainer');
+                var books = $('.book-item').detach();
+                
+                books.sort(function(a, b) {
+                  switch(sortBy) {
+                    case 'name':
+                      return $(a).data('name').localeCompare($(b).data('name'));
+                    case 'price-low':
+                      return parseFloat($(a).data('price')) - parseFloat($(b).data('price'));
+                    case 'price-high':
+                      return parseFloat($(b).data('price')) - parseFloat($(a).data('price'));
+                    case 'category':
+                      return $(a).data('category').localeCompare($(b).data('category'));
+                    default:
+                      return 0;
+                  }
+                });
+                
+                booksContainer.append(books);
+              }
+              
+              // Image error handling
+              $('.book-image').on('error', function() {
+                $(this).attr('src', 'https://via.placeholder.com/300x400/f8f9fa/6c757d?text=No+Image');
+              });
+              
+              // Add click animation to buttons
+              $('.btn').on('click', function() {
+                $(this).addClass('animate__animated animate__pulse');
+                setTimeout(() => {
+                  $(this).removeClass('animate__animated animate__pulse');
+                }, 1000);
+              });
+            });
+          </script>
 
         </body>
 

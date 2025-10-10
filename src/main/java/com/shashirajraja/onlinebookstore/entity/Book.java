@@ -35,6 +35,9 @@ public class Book {
 	@Column(name="price")
 	private double price;
 	
+	@Column(name="image_url", length = 500)
+	private String imageUrl;
+	
 	@JoinColumn(name="book_detail_id", referencedColumnName="id")
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private BookDetail bookDetail;
@@ -94,6 +97,14 @@ public class Book {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public BookDetail getBookDetail() {

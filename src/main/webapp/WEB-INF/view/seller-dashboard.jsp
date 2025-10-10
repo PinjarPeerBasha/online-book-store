@@ -339,10 +339,25 @@
                         <c:forEach items="${books}" var="book">
                           <tr>
                             <td>
-                              <strong>${book.name}</strong>
-                              <c:if test="${book.quantity == 0}">
-                                <br><span class="badge badge-danger">Out of Stock</span>
-                              </c:if>
+                              <div class="d-flex align-items-center">
+                                <div class="book-thumbnail mr-2">
+                                  <c:choose>
+                                    <c:when test="${not empty book.imageUrl}">
+                                      <img src="${book.imageUrl}" class="rounded" width="40" height="55" alt="${book.name}" 
+                                           onerror="this.src='https://via.placeholder.com/40x55/f8f9fa/6c757d?text=No+Image'" style="object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                      <img src="https://via.placeholder.com/40x55/f8f9fa/6c757d?text=Book" class="rounded" width="40" height="55" alt="Default book cover">
+                                    </c:otherwise>
+                                  </c:choose>
+                                </div>
+                                <div>
+                                  <strong>${book.name}</strong>
+                                  <c:if test="${book.quantity == 0}">
+                                    <br><span class="badge badge-danger">Out of Stock</span>
+                                  </c:if>
+                                </div>
+                              </div>
                             </td>
                             <td>${book.bookDetail.author != null ? book.bookDetail.author : 'N/A'}</td>
                             <td>
@@ -414,7 +429,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>

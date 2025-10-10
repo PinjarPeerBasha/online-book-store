@@ -281,33 +281,124 @@
                       please do not enter correct details!</h6>
                   </div>
                   <div class="card-body">
-                    <div class="table-responsive">
-                      <form:form action="${pageContext.request.contextPath}/customers/payment/success" method="post">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <form:form action="${pageContext.request.contextPath}/customers/payment/success" method="post">
+                      
+                      <!-- Alert Messages -->
+                      <c:if test="${message != null}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                          <i class="fas fa-exclamation-triangle"></i> ${message}
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                      </c:if>
 
-                          <tbody>
-                            <tr>
-                              <td colspan="2" style="color:red; align:center;">
-                                <c:if test="${message != null}">
-                                  <c:out value="${message}"></c:out>
-                                </c:if>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td style="color:green;">Enter UPI ID</td>
-                              <td><input type="text" name="upi" required /> </td>
-                            </tr>
-                            <tr>
-                              <td style="color:green;">Enter OTP</td>
-                              <td><input type="number" name="otp" required /> </td>
-                            </tr>
-                            <tr>
-                              <td><input type="submit" class="btn btn-success" value="PROCEED TO PAY" /></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </form:form>
-                    </div>
+                      <!-- Payment Method Selection -->
+                      <div class="row">
+                        <div class="col-12">
+                          <h5 class="mb-3"><i class="fas fa-credit-card"></i> Choose Payment Method</h5>
+                          
+                          <!-- Payment Options -->
+                          <div class="row mb-4">
+                            <!-- Cash on Delivery -->
+                            <div class="col-md-4 mb-3">
+                              <div class="card payment-option" onclick="selectPaymentMethod('cod')">
+                                <div class="card-body text-center">
+                                  <i class="fas fa-truck fa-3x text-success mb-3"></i>
+                                  <h6 class="card-title">Cash on Delivery</h6>
+                                  <p class="card-text small text-muted">Pay when your order arrives</p>
+                                  <input type="radio" name="paymentMethod" value="cod" id="codRadio" class="payment-radio">
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Online Payment (UPI) -->
+                            <div class="col-md-4 mb-3">
+                              <div class="card payment-option" onclick="selectPaymentMethod('upi')">
+                                <div class="card-body text-center">
+                                  <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                                  <h6 class="card-title">UPI Payment</h6>
+                                  <p class="card-text small text-muted">Pay instantly with UPI</p>
+                                  <input type="radio" name="paymentMethod" value="upi" id="upiRadio" class="payment-radio">
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Stripe Payment -->
+                            <div class="col-md-4 mb-3">
+                              <div class="card payment-option" onclick="selectPaymentMethod('stripe')">
+                                <div class="card-body text-center">
+                                  <i class="fas fa-credit-card fa-3x text-info mb-3"></i>
+                                  <h6 class="card-title">Card Payment</h6>
+                                  <p class="card-text small text-muted">Pay with Credit/Debit Card</p>
+                                  <input type="radio" name="paymentMethod" value="stripe" id="stripeRadio" class="payment-radio" disabled>
+                                  <small class="text-warning d-block">Coming Soon</small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- COD Details -->
+                          <div id="codDetails" class="payment-details" style="display: none;">
+                            <div class="card bg-light">
+                              <div class="card-body">
+                                <h6><i class="fas fa-info-circle text-success"></i> Cash on Delivery Selected</h6>
+                                <p class="mb-1">• Pay cash when your order is delivered</p>
+                                <p class="mb-1">• No additional charges</p>
+                                <p class="mb-0">• Make sure to have exact change ready</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- UPI Details -->
+                          <div id="upiDetails" class="payment-details" style="display: none;">
+                            <div class="card bg-light">
+                              <div class="card-body">
+                                <h6><i class="fas fa-mobile-alt text-primary"></i> UPI Payment Details</h6>
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label for="upi"><strong>UPI ID *</strong></label>
+                                      <input type="text" id="upi" name="upi" class="form-control" placeholder="example@upi" />
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label for="otp"><strong>OTP *</strong></label>
+                                      <input type="number" id="otp" name="otp" class="form-control" placeholder="Enter 6-digit OTP" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Stripe Details (Disabled) -->
+                          <div id="stripeDetails" class="payment-details" style="display: none;">
+                            <div class="card bg-light">
+                              <div class="card-body">
+                                <h6><i class="fas fa-credit-card text-info"></i> Card Payment (Coming Soon)</h6>
+                                <p class="text-muted mb-0">Credit/Debit card payments will be available soon. Please use COD or UPI for now.</p>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <!-- Action Buttons -->
+                      <div class="row mt-4">
+                        <div class="col-12 text-center">
+                          <button type="submit" id="payButton" class="btn btn-success btn-lg" disabled>
+                            <i class="fas fa-lock"></i> PROCEED TO PAY
+                          </button>
+                          <a href="${pageContext.request.contextPath}/customers/cart" class="btn btn-secondary btn-lg ml-3">
+                            <i class="fas fa-arrow-left"></i> Back to Cart
+                          </a>
+                        </div>
+                      </div>
+
+                    </form:form>
                   </div>
                 </div>
 
@@ -374,6 +465,102 @@
 
         <!-- Page level custom scripts -->
         <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+
+        <!-- Payment Page Custom Styles and Scripts -->
+        <style>
+          .payment-option {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e3e6f0;
+          }
+          
+          .payment-option:hover {
+            border-color: #4e73df;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          }
+          
+          .payment-option.selected {
+            border-color: #1cc88a;
+            background-color: #f8fff9;
+          }
+          
+          .payment-radio {
+            display: none;
+          }
+          
+          .payment-details {
+            animation: slideDown 0.3s ease;
+          }
+          
+          @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        </style>
+
+        <script>
+          $(document).ready(function() {
+            // Payment method selection
+            window.selectPaymentMethod = function(method) {
+              // Remove all selections
+              $('.payment-option').removeClass('selected');
+              $('.payment-details').hide();
+              $('.payment-radio').prop('checked', false);
+              
+              // Select current method
+              $('#' + method + 'Radio').prop('checked', true);
+              $('#' + method + 'Radio').closest('.payment-option').addClass('selected');
+              $('#' + method + 'Details').show();
+              
+              // Enable/disable pay button based on method
+              if (method === 'cod') {
+                $('#payButton').prop('disabled', false);
+                $('#payButton').html('<i class="fas fa-truck"></i> CONFIRM ORDER (COD)');
+              } else if (method === 'upi') {
+                $('#payButton').prop('disabled', false);
+                $('#payButton').html('<i class="fas fa-mobile-alt"></i> PROCEED TO PAY (UPI)');
+              } else if (method === 'stripe') {
+                $('#payButton').prop('disabled', true);
+                $('#payButton').html('<i class="fas fa-credit-card"></i> COMING SOON');
+              }
+            };
+            
+            // Form validation
+            $('form').on('submit', function(e) {
+              var paymentMethod = $('input[name="paymentMethod"]:checked').val();
+              
+              if (!paymentMethod) {
+                e.preventDefault();
+                alert('Please select a payment method');
+                return false;
+              }
+              
+              if (paymentMethod === 'upi') {
+                var upi = $('#upi').val().trim();
+                var otp = $('#otp').val().trim();
+                
+                if (!upi || !otp) {
+                  e.preventDefault();
+                  alert('Please fill in all UPI payment details');
+                  return false;
+                }
+                
+                if (otp.length !== 6) {
+                  e.preventDefault();
+                  alert('Please enter a valid 6-digit OTP');
+                  return false;
+                }
+              }
+              
+              if (paymentMethod === 'stripe') {
+                e.preventDefault();
+                alert('Stripe payment is coming soon. Please use COD or UPI.');
+                return false;
+              }
+            });
+          });
+        </script>
 
       </body>
 

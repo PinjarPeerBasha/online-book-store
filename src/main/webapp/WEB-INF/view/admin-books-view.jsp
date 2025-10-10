@@ -82,10 +82,32 @@
                       <tr>
                         <td>${book.id}</td>
                         <td>
-                          <strong>${book.name}</strong>
-                          <c:if test="${book.quantity == 0}">
-                            <span class="badge badge-danger ml-2">Out of Stock</span>
-                          </c:if>
+                          <div class="d-flex align-items-center">
+                            <div class="book-thumbnail mr-3">
+                              <c:choose>
+                                <c:when test="${not empty book.imageUrl}">
+                                  <img src="${book.imageUrl}" class="rounded" width="50" height="70" alt="${book.name}" 
+                                       onerror="this.src='https://via.placeholder.com/50x70/f8f9fa/6c757d?text=No+Image'" style="object-fit: cover;">
+                                </c:when>
+                                <c:otherwise>
+                                  <img src="https://via.placeholder.com/50x70/f8f9fa/6c757d?text=Book" class="rounded" width="50" height="70" alt="Default book cover">
+                                </c:otherwise>
+                              </c:choose>
+                            </div>
+                            <div>
+                              <strong>${book.name}</strong>
+                              <c:if test="${book.quantity == 0}">
+                                <br><span class="badge badge-danger">Out of Stock</span>
+                              </c:if>
+                              <c:if test="${not empty book.bookDetail.description}">
+                                <br><small class="text-muted">
+                                  ${book.bookDetail.description.length() > 50 ? 
+                                    book.bookDetail.description.substring(0, 50).concat('...') : 
+                                    book.bookDetail.description}
+                                </small>
+                              </c:if>
+                            </div>
+                          </div>
                         </td>
                         <td>${book.bookDetail.author != null ? book.bookDetail.author : 'N/A'}</td>
                         <td>${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}</td>

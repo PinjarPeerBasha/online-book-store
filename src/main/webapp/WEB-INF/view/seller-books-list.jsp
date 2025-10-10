@@ -213,7 +213,31 @@
                         <c:forEach var="book" items="${books}" varStatus="status">
                           <tr>
                             <td>${status.index + 1}</td>
-                            <td><strong>${book.name}</strong></td>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="book-thumbnail mr-3">
+                                  <c:choose>
+                                    <c:when test="${not empty book.imageUrl}">
+                                      <img src="${book.imageUrl}" class="rounded" width="50" height="70" alt="${book.name}" 
+                                           onerror="this.src='https://via.placeholder.com/50x70/f8f9fa/6c757d?text=No+Image'" style="object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                      <img src="https://via.placeholder.com/50x70/f8f9fa/6c757d?text=Book" class="rounded" width="50" height="70" alt="Default book cover">
+                                    </c:otherwise>
+                                  </c:choose>
+                                </div>
+                                <div>
+                                  <strong>${book.name}</strong>
+                                  <c:if test="${not empty book.bookDetail.description}">
+                                    <br><small class="text-muted">
+                                      ${book.bookDetail.description.length() > 50 ? 
+                                        book.bookDetail.description.substring(0, 50).concat('...') : 
+                                        book.bookDetail.description}
+                                    </small>
+                                  </c:if>
+                                </div>
+                              </div>
+                            </td>
                             <td>${book.bookDetail.author != null ? book.bookDetail.author : 'N/A'}</td>
                             <td><span class="badge badge-info">${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}</span></td>
                             <td>
@@ -224,14 +248,14 @@
                             <td><strong>INR <fmt:formatNumber value="${book.price}" pattern="#,##0.00" /></strong></td>
                             <td style="white-space: nowrap; color:green;">
                               <a href="${pageContext.request.contextPath}/seller/books/edit?bookId=${book.id}"
-                                class="btn btn-sm btn-primary">
+                                class="btn btn-sm btn-primary" title="Edit Book">
                                 <i class="fas fa-edit"></i>
                               </a>
-                              <button class="btn btn-sm btn-success" onclick="increaseQuantity('${book.id}')">
+                              <button class="btn btn-sm btn-success" onclick="increaseQuantity('${book.id}')" title="Add Stock">
                                 <i class="fas fa-plus"></i>
                               </button>
                               <a href="${pageContext.request.contextPath}/seller/books/delete?bookId=${book.id}"
-                                class="btn btn-sm btn-danger"
+                                class="btn btn-sm btn-danger" title="Delete Book"
                                 onclick="return confirm('Are you sure you want to delete this book?')">
                                 <i class="fas fa-trash"></i>
                               </a>
@@ -281,7 +305,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>

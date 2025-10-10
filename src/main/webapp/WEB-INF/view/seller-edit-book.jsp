@@ -123,6 +123,19 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="imageUrl"><strong>Book Cover Image URL</strong></label>
+                  <form:input type="url" class="form-control" path="imageUrl" placeholder="https://example.com/book-cover.jpg" maxlength="500" />
+                  <small class="form-text text-muted">
+                    <i class="fas fa-info-circle"></i> 
+                    Enter a direct URL to the book cover image. If left empty, a default placeholder will be used.
+                  </small>
+                </div>
+              </div>
+            </div>
+
             <!-- Book Details -->
             <h5 class="mt-4 mb-3">
               <i class="fas fa-info-circle"></i> Additional Details
