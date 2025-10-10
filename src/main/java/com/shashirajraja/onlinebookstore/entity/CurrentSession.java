@@ -20,8 +20,15 @@ public class CurrentSession {
 	
 	public User getUser() {
 		if (user == null) {
-			String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            user = userService.getUserByUsername(username);
+			try {
+				String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				if (username != null && !username.equals("anonymousUser")) {
+					user = userService.getUserByUsername(username);
+				}
+			} catch (Exception e) {
+				// Handle authentication errors gracefully
+				user = null;
+			}
         }
         return user;
 	}

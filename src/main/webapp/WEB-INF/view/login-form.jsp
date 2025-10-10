@@ -18,6 +18,8 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
       <!-- Custom styles for this template-->
       <link type="text/css" href="${pageContext.request.contextPath}/css/login-register.css" rel="stylesheet">
@@ -76,12 +78,30 @@
                         <hr>
                         <a href="${pageContext.request.contextPath}/forgot-password"
                           class="btn btn-google btn-user btn-block">
-                          <i class="fab fa-google fa-fw"></i> forgot Password?
+                          <i class="fas fa-lock fa-fw"></i> Forgot Password?
                         </a>
+                        <hr>
+                        <div class="text-center">
+                          <h6 class="text-gray-900 mb-3">Don't have an account?</h6>
+                        </div>
                         <a href="${pageContext.request.contextPath}/register"
-                          class="btn btn-facebook btn-user btn-block">
-                          <i class="fab fa-facebook-f fa-fw"></i> Create an Account!
+                          class="btn btn-success btn-user btn-block">
+                          <i class="fas fa-user-plus fa-fw"></i> Create Account (Customer or Seller)
                         </a>
+                        <div class="row mt-2">
+                          <div class="col-6">
+                            <a href="${pageContext.request.contextPath}/register/customer"
+                              class="btn btn-outline-primary btn-user btn-block btn-sm">
+                              <i class="fas fa-user fa-fw"></i> Customer
+                            </a>
+                          </div>
+                          <div class="col-6">
+                            <a href="${pageContext.request.contextPath}/register/seller"
+                              class="btn btn-outline-warning btn-user btn-block btn-sm">
+                              <i class="fas fa-store fa-fw"></i> Seller
+                            </a>
+                          </div>
+                        </div>
                       </form:form>
                     </div>
                   </div>

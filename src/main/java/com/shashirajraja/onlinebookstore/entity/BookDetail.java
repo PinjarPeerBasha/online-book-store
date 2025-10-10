@@ -16,14 +16,35 @@ public class BookDetail {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="type")
+	@Column(name="type", length = 100)
 	private String type;
 	
-	@Column(name="detail")
+	@Column(name="detail", length = 2000)
 	private String detail;
 	
 	@Column(name="sold")
 	private int sold;
+	
+	@Column(name="author", length = 255)
+	private String author;
+	
+	@Column(name="publisher", length = 255)
+	private String publisher;
+	
+	@Column(name="isbn", length = 50)
+	private String isbn;
+	
+	@Column(name="pages")
+	private Integer pages;
+	
+	@Column(name="category", length = 100)
+	private String category;
+	
+	@Column(name="description", length = 1000)
+	private String description;
+	
+	@Column(name="dimensions", length = 100)
+	private String dimensions;
 	
 	public BookDetail() {}
 
@@ -65,9 +86,66 @@ public class BookDetail {
 		this.sold = sold;
 	}
 
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public String getIsbn() {
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+
+	public Integer getPages() {
+		return pages;
+	}
+
+	public void setPages(Integer pages) {
+		this.pages = pages;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDimensions() {
+		return dimensions;
+	}
+
+	public void setDimensions(String dimensions) {
+		this.dimensions = dimensions;
+	}
+
 	@Override
 	public String toString() {
-		return "BookDetail [id=" + id + ", type=" + type + ", detail=" + detail + ", sold=" + sold + "]";
+		return "BookDetail [id=" + id + ", type=" + type + ", detail=" + detail + ", sold=" + sold + 
+				", author=" + author + ", category=" + category + "]";
 	}
 	
 }

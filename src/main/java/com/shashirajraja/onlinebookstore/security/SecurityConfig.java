@@ -40,10 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.authorizeRequests()
 		.antMatchers("/forgot-password/**").permitAll()
 		.antMatchers("/actuator/**").hasRole("ADMIN")
-		.antMatchers("/api/*").hasAnyRole("ADMIN","CUSTOMER")
+		.antMatchers("/api/*").hasAnyRole("ADMIN","CUSTOMER","SELLER")
 		.antMatchers("/admin/**").hasRole("ADMIN")
+		.antMatchers("/seller/**").hasRole("SELLER")
 		.antMatchers("/customers**").hasRole("CUSTOMER")
-		.antMatchers("/").hasAnyRole("ADMIN", "CUSTOMER")
+		.antMatchers("/").hasAnyRole("ADMIN", "CUSTOMER", "SELLER")
 		;
 	}
 

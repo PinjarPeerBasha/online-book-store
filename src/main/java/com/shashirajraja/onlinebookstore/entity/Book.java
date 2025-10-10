@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,6 +38,11 @@ public class Book {
 	@JoinColumn(name="book_detail_id", referencedColumnName="id")
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private BookDetail bookDetail;
+	
+	@JoinColumn(name="seller_id", referencedColumnName="id")
+	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REFRESH})
+	private Seller seller;
 	
 	@ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
 			CascadeType.MERGE, CascadeType.REFRESH})
@@ -96,6 +102,14 @@ public class Book {
 
 	public void setBookDetail(BookDetail bookDetail) {
 		this.bookDetail = bookDetail;
+	}
+	
+	public Seller getSeller() {
+		return seller;
+	}
+
+	public void setSeller(Seller seller) {
+		this.seller = seller;
 	}
 	
 	public List<Customer> getCustomers() {

@@ -17,6 +17,8 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
       <!-- Custom styles for this template-->
       <link type="text/css" href="${pageContext.request.contextPath}/css/login-register.css" rel="stylesheet">
@@ -86,11 +88,18 @@
                           placeholder="Confirm Password" />
                       </div>
                     </div>
-                    <input type="submit" value="Register" class="btn btn-primary btn-user btn-block" />
+                    <input type="submit" value="Create Customer Account" class="btn btn-primary btn-user btn-block" />
                     <hr>
-                    <a href="${pageContext.request.contextPath}/login" class="btn btn-google btn-user btn-block">
-                      <i class="fab fa-google fa-fw"></i> Already a user (Login Here)
-                    </a>
+                    <div class="text-center">
+                      <a href="${pageContext.request.contextPath}/register/seller" class="btn btn-warning btn-user btn-block">
+                        <i class="fas fa-store fa-fw"></i> Want to Sell Books? Register as Seller
+                      </a>
+                    </div>
+                    <div class="text-center mt-3">
+                      <a href="${pageContext.request.contextPath}/login" class="btn btn-google btn-user btn-block">
+                        <i class="fas fa-sign-in-alt fa-fw"></i> Already have an account? Login Here
+                      </a>
+                    </div>
 
                   </form:form>
                   <hr>

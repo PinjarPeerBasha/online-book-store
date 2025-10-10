@@ -17,6 +17,7 @@ import com.shashirajraja.onlinebookstore.dao.BookUserRepository;
 import com.shashirajraja.onlinebookstore.dao.CustomerRepository;
 import com.shashirajraja.onlinebookstore.dao.PurchaseDetailRepository;
 import com.shashirajraja.onlinebookstore.dao.PurchaseHistoryRepository;
+import com.shashirajraja.onlinebookstore.dao.SellerRepository;
 import com.shashirajraja.onlinebookstore.dao.ShoppingCartRepository;
 import com.shashirajraja.onlinebookstore.dao.UserRepository;
 import com.shashirajraja.onlinebookstore.entity.Book;
@@ -52,106 +53,44 @@ public class AdminController {
     private CustomerRepository customerRepository;
     
     @Autowired
+    private SellerRepository sellerRepository;
+    
+    @Autowired
     private UserRepository userRepository;
 
-    // Admin Dashboard
+    // Admin Dashboard - View system overview
     @GetMapping({"", "/"})
     public String adminDashboard(Model model) {
         Set<Book> books = bookService.getAllBooks();
         model.addAttribute("books", books);
         model.addAttribute("totalBooks", books.size());
+        model.addAttribute("totalCustomers", customerRepository.count());
+        model.addAttribute("totalSellers", sellerRepository.count());
         return "admin-dashboard";
     }
     
-    // View all books - Redirect to dashboard since books management is now centralized there
+    // View all books in the system (read-only for admin)
     @GetMapping("/books")
-    public String viewBooks(RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("message", "Book management has been moved to the main dashboard for better user experience.");
-        redirectAttributes.addFlashAttribute("messageType", "success");
-        return "redirect:/admin";
+    public String viewAllBooks(Model model) {
+        Set<Book> books = bookService.getAllBooks();
+        model.addAttribute("books", books);
+        model.addAttribute("message", "Admin can view all books but cannot add/edit them. Only sellers can manage books.");
+        model.addAttribute("messageType", "info");
+        return "admin-books-view";
     }
     
-    // Add new book form
-    @GetMapping("/books/add")
-    public String showAddBookForm(Model model) {
-        Book book = new Book();
-        book.setBookDetail(new BookDetail());
-        model.addAttribute("book", book);
-        return "admin-add-book";
+    // View all customers (admin function)
+    @GetMapping("/customers")
+    public String viewAllCustomers(Model model) {
+        model.addAttribute("customers", customerRepository.findAll());
+        return "admin-customers-view";
     }
     
-    // Process add book
-    @PostMapping("/books/add")
-    public String addBook(@ModelAttribute("book") Book book, RedirectAttributes redirectAttributes) {
-        try {
-            String result = bookService.addBook(book);
-            redirectAttributes.addFlashAttribute("message", result);
-            redirectAttributes.addFlashAttribute("messageType", "success");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Error adding book: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("messageType", "error");
-        }
-        return "redirect:/admin";
-    }
-    
-    // Edit book form
-    @GetMapping("/books/edit")
-    public String showEditBookForm(@RequestParam("bookId") int bookId, Model model) {
-        Book book = bookService.getBookById(bookId);
-        if (book != null) {
-            model.addAttribute("book", book);
-            return "admin-edit-book";
-        } else {
-            model.addAttribute("message", "Book not found!");
-            return "redirect:/admin/books";
-        }
-    }
-    
-    // Process edit book
-    @PostMapping("/books/edit")
-    public String editBook(@ModelAttribute("book") Book book, RedirectAttributes redirectAttributes) {
-        try {
-            String result = bookService.updateBook(book);
-            redirectAttributes.addFlashAttribute("message", result);
-            redirectAttributes.addFlashAttribute("messageType", "success");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Error updating book: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("messageType", "error");
-        }
-        return "redirect:/admin";
-    }
-    
-    // Delete book
-    @GetMapping("/books/delete")
-    public String deleteBook(@RequestParam("bookId") int bookId, RedirectAttributes redirectAttributes) {
-        try {
-            String result = bookService.removeBookById(bookId);
-            redirectAttributes.addFlashAttribute("message", result);
-            redirectAttributes.addFlashAttribute("messageType", "success");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Error deleting book: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("messageType", "error");
-        }
-        return "redirect:/admin";
-    }
-    
-    // Increase book quantity
-    @PostMapping("/books/increase-quantity")
-    @ResponseBody
-    public String increaseBookQuantity(@RequestParam("bookId") int bookId, 
-                                     @RequestParam("quantity") int quantity) {
-        try {
-            Book book = bookService.getBookById(bookId);
-            if (book != null) {
-                book.setQuantity(book.getQuantity() + quantity);
-                bookService.updateBook(book);
-                return "Quantity increased successfully! New quantity: " + book.getQuantity();
-            } else {
-                return "Book not found!";
-            }
-        } catch (Exception e) {
-            return "Error increasing quantity: " + e.getMessage();
-        }
+    // View all sellers (admin function)
+    @GetMapping("/sellers")
+    public String viewAllSellers(Model model) {
+        model.addAttribute("sellers", sellerRepository.findAll());
+        return "admin-sellers-view";
     }
 
     @DeleteMapping("/clear-all-users")
@@ -164,11 +103,12 @@ public class AdminController {
             purchaseHistoryRepository.deleteAll();
             shoppingCartRepository.deleteAll();
             customerRepository.deleteAll();
+            sellerRepository.deleteAll();
             userRepository.deleteAll();
             
-            return "All users and customers have been successfully deleted!";
+            return "All users, customers, and sellers have been successfully deleted!";
         } catch (Exception e) {
-            return "Error occurred while deleting users and customers: " + e.getMessage();
+            return "Error occurred while deleting users: " + e.getMessage();
         }
     }
     

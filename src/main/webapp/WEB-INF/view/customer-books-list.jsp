@@ -293,7 +293,7 @@
                             <tr>
                               <th>Id</th>
                               <th>Name</th>
-                              <th>Type</th>
+                              <th>Category</th>
                               <th>Available</th>
                               <th>Price</th>
                               <th>Actions</th>
@@ -316,15 +316,14 @@
                                   <c:out value="${book.name}" />
                                 </td>
                                 <td>
-                                  <c:out value="${book.bookDetail.type}" />
+                                  <c:out value="${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}" />
                                 </td>
                                 <td>
                                   <c:out value="${book.quantity}" />
                                 </td>
                                 <td>
-                                  <span>&#8377;</span>
-                                  <c:out value="${book.price}" />
-                                </td>
+                              <strong>INR <c:out value="${book.price}" /></strong>
+                            </td>
 
                                 <td style="color:green;">
 

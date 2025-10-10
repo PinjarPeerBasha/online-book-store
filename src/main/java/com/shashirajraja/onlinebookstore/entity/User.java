@@ -33,6 +33,9 @@ public class User {
 	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Customer customer;
 	
+	@OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Seller seller;
+	
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Authority> authorities;
 	
@@ -90,6 +93,14 @@ public class User {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public Seller getSeller() {
+		return seller;
+	}
+
+	public void setSeller(Seller seller) {
+		this.seller = seller;
 	}
 
 	public List<Authority> getAuthorities() {
