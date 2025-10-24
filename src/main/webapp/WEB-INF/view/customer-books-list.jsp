@@ -337,7 +337,7 @@
                             <c:param name="bookId" value="${book.id}" />
                           </c:url>
                           
-                          <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-4 book-item" 
+                          <div class="col-lg-3 col-md-4 col-sm-6 mb-4 book-item" 
                                data-name="${book.name}" 
                                data-book-id="${book.id}"
                                data-category="${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}"
@@ -529,7 +529,7 @@
             
             .book-image-container {
               position: relative;
-              height: 300px;
+              height: 200px;
               overflow: hidden;
             }
             
@@ -576,7 +576,7 @@
             
             @media (max-width: 768px) {
               .book-image-container {
-                height: 250px;
+                height: 180px;
               }
             }
           </style>

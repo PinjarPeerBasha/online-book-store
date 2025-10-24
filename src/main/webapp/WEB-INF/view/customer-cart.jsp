@@ -384,13 +384,15 @@
                                 <div class="col-md-4 text-right">
                                   <c:choose>
                                     <c:when test="${totalQuantity > 0}">
-                                      <a class="btn btn-success btn-lg" href="${pageContext.request.contextPath}/customers/cart/pay">
+                                      <a class="btn btn-success btn-lg shadow-sm" href="${pageContext.request.contextPath}/customers/cart/pay" style="padding: 12px 30px; font-size: 1.1rem;">
                                         <i class="fas fa-credit-card"></i> Proceed to Payment
                                       </a>
-                                      <p class="small text-muted mt-2">Secure checkout with multiple payment options</p>
+                                      <p class="small text-muted mt-2">
+                                        <i class="fas fa-shield-alt"></i> Secure checkout with multiple payment options
+                                      </p>
                                     </c:when>
                                     <c:otherwise>
-                                      <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/books">
+                                      <a class="btn btn-primary btn-lg shadow-sm" href="${pageContext.request.contextPath}/books" style="padding: 12px 30px; font-size: 1.1rem;">
                                         <i class="fas fa-book"></i> Browse Books
                                       </a>
                                       <p class="small text-muted mt-2">Your cart is empty</p>

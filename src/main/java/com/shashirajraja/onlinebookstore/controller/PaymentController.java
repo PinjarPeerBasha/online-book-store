@@ -39,6 +39,15 @@ public class PaymentController {
 		return "customer-payment-modern";
 	}
 	
+	@GetMapping("customers/payment/success")
+	public String paymentSuccessGet(Model theModel) {
+		Customer customer = currentSession.getUser().getCustomer();
+		Set<PurchaseHistory> purchaseHistories = paymentService.getPurchaseHistories(customer);
+		theModel.addAttribute("purchaseHistories", purchaseHistories);
+		addCartDataToModel(theModel);
+		return "customer-payment-success";
+	}
+	
 	@PostMapping("customers/payment/success")
 	public String paymentSuccess(@Param("upi") String upi, @Param("otp") String otp, @Param("paymentMethod") String paymentMethod, Model theModel) {
 		Customer customer = currentSession.getUser().getCustomer();

@@ -325,13 +325,11 @@
                                   <c:out value="${book.price}" />
                                 </td>
 
-                                <td style="color:green;">
-
-                                  <!--Check if the item is already added to cart or not!  -->
-
-                                  <a href="${readBookLink}"><input type="button" class="btn btn-success"
-                                      value="READ NOW"></a>
-
+                                <td>
+                                  <button type="button" class="btn btn-warning" disabled>
+                                    <i class="fas fa-tools"></i> Under Construction
+                                  </button>
+                                  <small class="d-block text-muted mt-1">Read feature coming soon!</small>
                                 </td>
                               </tr>
                             </c:forEach>
