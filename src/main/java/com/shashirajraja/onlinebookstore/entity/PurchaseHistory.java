@@ -27,6 +27,9 @@ public class PurchaseHistory {
 	
 	@Column(name="date")
 	private Date date;
+	
+	@Column(name="payment_method", length = 20)
+	private String paymentMethod;
 
 	@OneToMany(mappedBy ="purchaseHistory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	Set<PurchaseDetail> purchaseDetails;
@@ -53,6 +56,14 @@ public class PurchaseHistory {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 	public Customer getCustomer() {

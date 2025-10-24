@@ -337,8 +337,9 @@
                             <c:param name="bookId" value="${book.id}" />
                           </c:url>
                           
-                          <div class="col-lg-3 col-md-4 col-sm-6 mb-4 book-item" 
+                          <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-4 book-item" 
                                data-name="${book.name}" 
+                               data-book-id="${book.id}"
                                data-category="${book.bookDetail.category != null ? book.bookDetail.category : 'N/A'}"
                                data-price="${book.price}">
                             <div class="card book-card h-100 shadow-sm">
@@ -405,12 +406,12 @@
                                       </button>
                                     </c:when>
                                     <c:when test="${contains != true}">
-                                      <a href="${addToCartLink}" class="btn btn-success btn-block">
+                                      <a href="${addToCartLink}" class="btn btn-success btn-block add-to-cart-btn" data-book-name="${book.name}">
                                         <i class="fas fa-cart-plus"></i> Add to Cart
                                       </a>
                                     </c:when>
                                     <c:otherwise>
-                                      <a href="${removeFromCartLink}" class="btn btn-danger btn-block">
+                                      <a href="${removeFromCartLink}" class="btn btn-danger btn-block remove-from-cart-btn" data-book-name="${book.name}">
                                         <i class="fas fa-trash"></i> Remove from Cart
                                       </a>
                                     </c:otherwise>
@@ -508,6 +509,9 @@
 
           <!-- Page level custom scripts -->
           <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+  
+          <!-- Toast Notifications -->
+          <script src="${pageContext.request.contextPath}/js/toast-notifications.js"></script>
 
           <!-- Book Grid Custom Styles and Scripts -->
           <style>
@@ -579,6 +583,26 @@
 
           <script>
             $(document).ready(function() {
+            // Show message from server as toast
+            <c:if test="${message != null}">
+              Toast.success('${message}');
+            </c:if>
+            
+            // Handle add to cart with toast
+            $('.add-to-cart-btn').on('click', function(e) {
+              const bookName = $(this).data('book-name');
+              setTimeout(function() {
+                Toast.success('Book: "' + bookName + '" added to cart!');
+              }, 100);
+            });
+            
+            // Handle remove from cart with toast
+            $('.remove-from-cart-btn').on('click', function(e) {
+              const bookName = $(this).data('book-name');
+              setTimeout(function() {
+                Toast.warning('Book: "' + bookName + '" removed from cart!');
+              }, 100);
+            });
               // Search functionality
               $('#searchBooks').on('keyup', function() {
                 var searchTerm = $(this).val().toLowerCase();

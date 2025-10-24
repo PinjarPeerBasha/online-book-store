@@ -41,6 +41,9 @@ public class Seller {
 	
 	@Column(name="business_description")
 	private String businessDescription;
+	
+	@Column(name="profile_photo")
+	private String profilePhotoPath;
 
 	@JoinColumn(name="id")
 	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
@@ -64,6 +67,7 @@ public class Seller {
 		this.address = address;
 		this.businessName = businessName;
 		this.businessDescription = businessDescription;
+		this.profilePhotoPath = null;
 		this.books = new HashSet<Book>();
 	}
 
@@ -129,6 +133,14 @@ public class Seller {
 
 	public void setBusinessDescription(String businessDescription) {
 		this.businessDescription = businessDescription;
+	}
+
+	public String getProfilePhotoPath() {
+		return profilePhotoPath;
+	}
+
+	public void setProfilePhotoPath(String profilePhotoPath) {
+		this.profilePhotoPath = profilePhotoPath;
 	}
 
 	public User getUser() {

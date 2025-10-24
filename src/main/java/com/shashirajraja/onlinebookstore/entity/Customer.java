@@ -41,6 +41,9 @@ public class Customer {
 	
 	@Column(name="address")
 	private String address;
+	
+	@Column(name="profile_photo")
+	private String profilePhotoPath;
 
 	@JoinColumn(name="id")
 	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
@@ -71,6 +74,7 @@ public class Customer {
 		this.email = email;
 		this.mobile = mobile;
 		this.address = address;
+		this.profilePhotoPath = null;
 		this.books = new HashSet<Book>();
 		this.shoppingCart = new HashSet<ShoppingCart>();
 		this.purchaseHistories = new HashSet<PurchaseHistory>();
@@ -122,6 +126,14 @@ public class Customer {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getProfilePhotoPath() {
+		return profilePhotoPath;
+	}
+
+	public void setProfilePhotoPath(String profilePhotoPath) {
+		this.profilePhotoPath = profilePhotoPath;
 	}
 
 	public User getUser() {

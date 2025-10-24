@@ -90,5 +90,10 @@ public class BookServiceImpl implements BookService {
 		
 		return "Book Deleted Successfully!";
 	}
+
+	@Override
+	public Book getBook(int bookId) {
+		return getBookById(bookId);
+	}
 	
 }

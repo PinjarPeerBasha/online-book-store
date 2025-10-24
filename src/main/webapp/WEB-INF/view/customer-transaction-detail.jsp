@@ -287,83 +287,143 @@
                       </div>
                     </c:if>
                     <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                          <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Quantity</th>
-                              <th>Price/Item</th>
-                              <th>Amount</th>
-                            </tr>
-                          </thead>
+                      <!-- Transaction Header -->
+                      <div class="transaction-header mb-4">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <h5><i class="fas fa-receipt text-primary"></i> Transaction #${purchaseHistory.id}</h5>
+                            <p class="text-muted"><i class="fas fa-calendar"></i> ${purchaseHistory.date}</p>
+                          </div>
+                          <div class="col-md-6 text-right">
+                            <c:choose>
+                              <c:when test="${purchaseHistory.paymentMethod != null && purchaseHistory.paymentMethod == 'cod'}">
+                                <span class="badge badge-warning badge-lg">
+                                  <i class="fas fa-truck"></i> Cash on Delivery
+                                </span>
+                              </c:when>
+                              <c:when test="${purchaseHistory.paymentMethod != null && purchaseHistory.paymentMethod == 'upi'}">
+                                <span class="badge badge-primary badge-lg">
+                                  <i class="fas fa-mobile-alt"></i> UPI Payment
+                                </span>
+                              </c:when>
+                              <c:otherwise>
+                                <span class="badge badge-secondary badge-lg">
+                                  <i class="fas fa-credit-card"></i> Online Payment
+                                </span>
+                              </c:otherwise>
+                            </c:choose>
+                            <br><span class="badge badge-success mt-2"><i class="fas fa-check-circle"></i> Completed</span>
+                          </div>
+                        </div>
+                      </div>
 
-                          <tbody>
-                            <c:set var="totalQuantity" value="0" />
-                            <c:set var="totalPrice" value="0" scope="page" />
-                            <c:forEach var="detail" items="${purchaseHistory.purchaseDetails}">
-                              <!--URL for the add to cart option  -->
-                              <tr>
-                                <td>
-                                  <c:out value="${detail.book.id}" />
-                                </td>
-                                <td>
-                                  <c:out value="${detail.book.name}" />
-                                </td>
-                                <td>
-                                  <c:out value="${detail.book.bookDetail.type}" />
-                                </td>
-                                <td>
-                                  <c:out value="${detail.quantity}" />
-                                </td>
-                                <td>
-                                  <c:out value="${detail.price}" />
-                                </td>
-                                <td>
-                                  <c:out value="${detail.price * detail.quantity}" />
-                                </td>
-                                <c:set var="totalQuantity" value="${totalQuantity + detail.quantity}" />
-                                <c:set var="totalPrice" value="${totalPrice + (detail.price * detail.quantity) }" />
-                              </tr>
-                            </c:forEach>
-                          </tbody>
-                        </table>
+                      <!-- Books Details -->
+                      <div class="transaction-books">
+                        <h6 class="mb-3"><i class="fas fa-book"></i> Books Purchased</h6>
+                        <c:set var="totalQuantity" value="0" />
+                        <c:set var="totalPrice" value="0" scope="page" />
+                        <c:forEach var="detail" items="${purchaseHistory.purchaseDetails}">
+                          <div class="book-detail-card card shadow-sm mb-3">
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <!-- Book Image -->
+                                <div class="col-md-2 text-center">
+                                  <c:choose>
+                                    <c:when test="${not empty detail.book.imageUrl}">
+                                      <img src="${detail.book.imageUrl}" class="img-fluid rounded shadow-sm" alt="${detail.book.name}" 
+                                           onerror="this.src='https://via.placeholder.com/100x140/f8f9fa/6c757d?text=No+Image'" style="max-width: 100px; max-height: 140px; object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                      <img src="https://via.placeholder.com/100x140/f8f9fa/6c757d?text=Book+Cover" class="img-fluid rounded shadow-sm" alt="Default book cover">
+                                    </c:otherwise>
+                                  </c:choose>
+                                </div>
+                                
+                                <!-- Book Info -->
+                                <div class="col-md-5">
+                                  <h6 class="font-weight-bold">${detail.book.name}</h6>
+                                  <p class="text-muted small mb-1">
+                                    <i class="fas fa-user"></i> ${detail.book.bookDetail.author != null ? detail.book.bookDetail.author : 'Unknown Author'}
+                                  </p>
+                                  <p class="text-muted small mb-1">
+                                    <i class="fas fa-tag"></i> ${detail.book.bookDetail.category != null ? detail.book.bookDetail.category : 'N/A'}
+                                  </p>
+                                  <c:if test="${not empty detail.book.bookDetail.description}">
+                                    <p class="text-muted small">
+                                      ${detail.book.bookDetail.description.length() > 80 ? 
+                                        detail.book.bookDetail.description.substring(0, 80).concat('...') : 
+                                        detail.book.bookDetail.description}
+                                    </p>
+                                  </c:if>
+                                </div>
+                                
+                                <!-- Quantity -->
+                                <div class="col-md-2 text-center">
+                                  <p class="mb-1 small text-muted">Quantity</p>
+                                  <span class="badge badge-info badge-lg">×${detail.quantity}</span>
+                                </div>
+                                
+                                <!-- Price -->
+                                <div class="col-md-2 text-center">
+                                  <p class="mb-1 small text-muted">Price/Item</p>
+                                  <h6 class="text-primary">INR ${detail.price}</h6>
+                                </div>
+                                
+                                <!-- Total -->
+                                <div class="col-md-1 text-center">
+                                  <p class="mb-1 small text-muted">Total</p>
+                                  <h6 class="text-success font-weight-bold">INR ${detail.price * detail.quantity}</h6>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <c:set var="totalQuantity" value="${totalQuantity + detail.quantity}" />
+                          <c:set var="totalPrice" value="${totalPrice + (detail.price * detail.quantity) }" />
+                        </c:forEach>
+                        
+                        <!-- Transaction Summary -->
+                        <div class="transaction-summary mt-4">
+                          <div class="card bg-light">
+                            <div class="card-body">
+                              <h6 class="mb-3"><i class="fas fa-calculator"></i> Order Summary</h6>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="summary-item d-flex justify-content-between mb-2">
+                                    <span>Total Items:</span>
+                                    <span class="badge badge-primary">${totalQuantity}</span>
+                                  </div>
+                                  <div class="summary-item d-flex justify-content-between mb-2">
+                                    <span>Payment Method:</span>
+                                    <c:choose>
+                                      <c:when test="${purchaseHistory.paymentMethod != null && purchaseHistory.paymentMethod == 'cod'}">
+                                        <span class="text-warning font-weight-bold">Cash on Delivery</span>
+                                      </c:when>
+                                      <c:when test="${purchaseHistory.paymentMethod != null && purchaseHistory.paymentMethod == 'upi'}">
+                                        <span class="text-primary font-weight-bold">UPI Payment</span>
+                                      </c:when>
+                                      <c:otherwise>
+                                        <span class="text-info font-weight-bold">Online Payment</span>
+                                      </c:otherwise>
+                                    </c:choose>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="summary-item d-flex justify-content-between mb-2">
+                                    <span>Order Date:</span>
+                                    <span class="font-weight-bold">${purchaseHistory.date}</span>
+                                  </div>
+                                  <div class="summary-item d-flex justify-content-between">
+                                    <strong>Total Amount:</strong>
+                                    <h5 class="text-success mb-0">INR ${totalPrice}</h5>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr style="color:green;">Transaction and Payments Details</tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td style="color:red">Transaction ID:</td>
-                        <td>
-                          <c:out value="${purchaseHistory.id}" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="color:red;">Date:</td>
-                        <td>
-                          <c:out value="${purchaseHistory.date}" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="color:red;">Total Items Bought:</td>
-                        <td>
-                          <c:out value="${totalQuantity}" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="color:red;">Total Amount Paid:</td>
-                        <td>
-                          <c:out value="${totalPrice}" />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
                 <!-- /.container-fluid -->
 

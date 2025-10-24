@@ -36,17 +36,29 @@ public class PaymentController {
 	@GetMapping("customers/cart/pay")
 	public String showPaymentForm(Model theModel) {
 		addCartDataToModel(theModel);
-		return "customer-payment-form";
+		return "customer-payment-modern";
 	}
 	
 	@PostMapping("customers/payment/success")
-	public String paymentSuccess(@Param("upi") String upi,@Param("otp") String otp, Model theModel) {
+	public String paymentSuccess(@Param("upi") String upi, @Param("otp") String otp, @Param("paymentMethod") String paymentMethod, Model theModel) {
 		Customer customer = currentSession.getUser().getCustomer();
 		//load the purchase history
 		paymentService.getPurchaseHistories(customer);
-		//create purchase History
-		String transId = paymentService.createTransaction(customer);
-		theModel.addAttribute("message", "Payment Successful with transaction Id: "+ transId);
+		//create purchase History with payment method
+		String transId = paymentService.createTransaction(customer, paymentMethod);
+		
+		String paymentMethodText = "";
+		if ("cod".equals(paymentMethod)) {
+			paymentMethodText = "Cash on Delivery";
+		} else if ("upi".equals(paymentMethod)) {
+			paymentMethodText = "UPI Payment";
+		} else if ("stripe".equals(paymentMethod)) {
+			paymentMethodText = "Card Payment";
+		} else {
+			paymentMethodText = "Online Payment";
+		}
+		
+		theModel.addAttribute("message", "Payment Successful (" + paymentMethodText + ") with transaction Id: "+ transId);
 		theModel.addAttribute("purchaseHistory", paymentService.getPurchaseHistory(customer, transId));
 		addCartDataToModel(theModel);
 		return "customer-transaction-detail";

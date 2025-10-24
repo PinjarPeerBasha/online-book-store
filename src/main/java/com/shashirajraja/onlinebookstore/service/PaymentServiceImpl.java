@@ -46,6 +46,12 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	@Transactional
 	public String createTransaction(Customer customer) {
+		return createTransaction(customer, null);
+	}
+	
+	@Override
+	@Transactional
+	public String createTransaction(Customer customer, String paymentMethod) {
 		//get the customer cart items and add it to his buys history;
 		Set<ShoppingCart> items = customer.getShoppingCart();
 		
@@ -72,6 +78,10 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		//now add the purchase details to purchase history
 		purchaseHistory.setPurchaseDetails(purchaseDetails);
+		// Set the payment method
+		if (paymentMethod != null) {
+			purchaseHistory.setPaymentMethod(paymentMethod);
+		}
 		//save the purchase History
 		try {
 			purchaseHistoryRepos.save(purchaseHistory);

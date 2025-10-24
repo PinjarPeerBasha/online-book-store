@@ -10,6 +10,8 @@ public interface PaymentService {
 
 	String createTransaction(Customer customer);
 	
+	String createTransaction(Customer customer, String paymentMethod);
+	
 	Set<PurchaseHistory> getPurchaseHistories(Customer customer);
 	
 	Set<PurchaseDetail> getPurchaseDetails(PurchaseHistory purchaseHistory);

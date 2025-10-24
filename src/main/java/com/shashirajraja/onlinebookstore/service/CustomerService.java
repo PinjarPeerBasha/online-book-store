@@ -13,6 +13,8 @@ public interface CustomerService {
 	public List<Customer> getAllCustomers();
 	
 	public Customer getCustomer(String username);
+	
+	public Customer findByUsername(String username);
 		
 	public String saveCustomer(Customer theCustomer);
 	

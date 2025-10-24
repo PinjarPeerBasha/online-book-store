@@ -12,6 +12,8 @@ public interface SellerService {
 	public List<Seller> getAllSellers();
 	
 	public Seller getSeller(String username);
+	
+	public Seller findByUsername(String username);
 		
 	public String saveSeller(Seller theSeller);
 	

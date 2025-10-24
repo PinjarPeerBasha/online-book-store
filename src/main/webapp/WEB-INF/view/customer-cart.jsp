@@ -287,92 +287,122 @@
                       </div>
                     </c:if>
                     <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                          <thead>
-                            <tr>
-                              <th>Id</th>
-                              <th>Name</th>
-                              <th>Type</th>
-                              <th>Price/Item</th>
-                              <th>Quantity</th>
-                              <th>Amount</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-
-                          <tbody>
-                            <c:set var="totalPrice" value="0" scope="page" />
-                            <c:set var="totalQuantity" value="0" scope="page" />
-                            <c:forEach var="shoppingCart" items="${shoppingItems}">
-                              <!--URL for the add to cart option  -->
-
-                              <c:url var="removeFromCartLink" value="/customers/cart/remove">
-                                <c:param name="bookId" value="${shoppingCart.book.id}" />
-                              </c:url>
-
-                              <tr>
-                                <td>
-                                  <c:out value="${shoppingCart.book.id}" />
-                                </td>
-                                <td>
-                                  <c:out value="${shoppingCart.book.name}" />
-                                </td>
-                                <td>
-                                  <c:out value="${shoppingCart.book.bookDetail.type}" />
-                                </td>
-                                <td>
-                                  <c:out value="${shoppingCart.book.price}" /> <span>&#8377;</span>
-                                </td>
-                                <td>
-                                  <c:out value="${shoppingCart.quantity}" />
-                                </td>
-                                <td>
-                                  <c:out value="${shoppingCart.quantity * shoppingCart.book.price}" />
-                                </td>
-
-                                <td style="color:green;">
-                                  <a href="${removeFromCartLink}"><input type="button" class="btn btn-danger"
-                                      value="Remove"></a>
-                                </td>
-                                <c:set var="totalPrice"
-                                  value="${totalPrice + (shoppingCart.quantity * shoppingCart.book.price) }"
-                                  scope="page" />
-                                <c:set var="totalQuantity" value="${totalQuantity + shoppingCart.quantity }"
-                                  scope="page" />
-
-                              </tr>
-                            </c:forEach>
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <td colspan="3"></td>
-                              <td>Total</td>
-                              <td>
-                                <c:out value="${totalQuantity}" /> (items)
-                              </td>
-                              <td>
-                                <c:out value="${totalPrice}" /> <span>&#8377;</span>
-                              </td>
-                              <td>
-                                <c:if test="${totalQuantity ne 0}"><a class="btn btn-success"
-                                    href="${pageContext.request.contextPath}/customers/cart/pay">Pay Now</a> </c:if>
-                                <c:if test="${totalQuantity eq 0}"><a class="btn btn-success"
-                                    href="${pageContext.request.contextPath}/books">View Books</a> </c:if>
-                              </td>
-                            </tr>
-                          </tfoot>
-                        </table>
+                      <!-- Modern Cart Layout -->
+                      <div class="cart-container">
+                        <c:set var="totalPrice" value="0" scope="page" />
+                        <c:set var="totalQuantity" value="0" scope="page" />
+                        <c:forEach var="shoppingCart" items="${shoppingItems}">
+                          <c:url var="removeFromCartLink" value="/customers/cart/remove">
+                            <c:param name="bookId" value="${shoppingCart.book.id}" />
+                          </c:url>
+                          
+                          <div class="cart-item card shadow-sm mb-3">
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <!-- Book Image -->
+                                <div class="col-md-2 col-sm-3 text-center">
+                                  <div class="cart-book-image">
+                                    <c:choose>
+                                      <c:when test="${not empty shoppingCart.book.imageUrl}">
+                                        <img src="${shoppingCart.book.imageUrl}" class="img-fluid rounded" alt="${shoppingCart.book.name}" 
+                                             onerror="this.src='https://via.placeholder.com/120x160/f8f9fa/6c757d?text=No+Image'" style="max-width: 120px; max-height: 160px; object-fit: cover;">
+                                      </c:when>
+                                      <c:otherwise>
+                                        <img src="https://via.placeholder.com/120x160/f8f9fa/6c757d?text=Book+Cover" class="img-fluid rounded" alt="Default book cover">
+                                      </c:otherwise>
+                                    </c:choose>
+                                  </div>
+                                </div>
+                                
+                                <!-- Book Details -->
+                                <div class="col-md-4 col-sm-5">
+                                  <h6 class="font-weight-bold mb-1">${shoppingCart.book.name}</h6>
+                                  <p class="text-muted small mb-1">
+                                    <i class="fas fa-user"></i> ${shoppingCart.book.bookDetail.author != null ? shoppingCart.book.bookDetail.author : 'Unknown Author'}
+                                  </p>
+                                  <p class="text-muted small mb-1">
+                                    <i class="fas fa-tag"></i> ${shoppingCart.book.bookDetail.category != null ? shoppingCart.book.bookDetail.category : 'N/A'}
+                                  </p>
+                                  <c:if test="${not empty shoppingCart.book.bookDetail.description}">
+                                    <p class="text-muted small">
+                                      <i class="fas fa-info-circle"></i> 
+                                      ${shoppingCart.book.bookDetail.description.length() > 60 ? 
+                                        shoppingCart.book.bookDetail.description.substring(0, 60).concat('...') : 
+                                        shoppingCart.book.bookDetail.description}
+                                    </p>
+                                  </c:if>
+                                </div>
+                                
+                                <!-- Price Per Item -->
+                                <div class="col-md-2 col-sm-2 text-center">
+                                  <p class="mb-1 small text-muted">Price/Item</p>
+                                  <h6 class="text-primary font-weight-bold">INR ${shoppingCart.book.price}</h6>
+                                </div>
+                                
+                                <!-- Quantity -->
+                                <div class="col-md-2 col-sm-2 text-center">
+                                  <p class="mb-1 small text-muted">Quantity</p>
+                                  <span class="badge badge-info badge-lg">×${shoppingCart.quantity}</span>
+                                </div>
+                                
+                                <!-- Subtotal -->
+                                <div class="col-md-2 col-sm-2 text-center">
+                                  <p class="mb-1 small text-muted">Subtotal</p>
+                                  <h6 class="text-success font-weight-bold">INR ${shoppingCart.quantity * shoppingCart.book.price}</h6>
+                                  <a href="${removeFromCartLink}" class="btn btn-sm btn-outline-danger mt-2 remove-cart-item" 
+                                     data-book-name="${shoppingCart.book.name}"
+                                     onclick="return confirm('Remove this book from cart?')">
+                                    <i class="fas fa-trash"></i> Remove
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          
+                          <c:set var="totalPrice"
+                            value="${totalPrice + (shoppingCart.quantity * shoppingCart.book.price) }"
+                            scope="page" />
+                          <c:set var="totalQuantity" value="${totalQuantity + shoppingCart.quantity }"
+                            scope="page" />
+                        </c:forEach>
+                        
+                        <!-- Cart Summary -->
+                        <div class="cart-summary">
+                          <div class="card bg-light">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-8">
+                                  <h5 class="mb-3"><i class="fas fa-shopping-cart"></i> Cart Summary</h5>
+                                  <div class="row">
+                                    <div class="col-sm-6">
+                                      <p class="mb-2"><strong>Total Items:</strong> <span class="badge badge-primary">${totalQuantity}</span></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                      <p class="mb-2"><strong>Total Amount:</strong> <span class="text-success font-weight-bold">INR ${totalPrice}</span></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                  <c:choose>
+                                    <c:when test="${totalQuantity > 0}">
+                                      <a class="btn btn-success btn-lg" href="${pageContext.request.contextPath}/customers/cart/pay">
+                                        <i class="fas fa-credit-card"></i> Proceed to Payment
+                                      </a>
+                                      <p class="small text-muted mt-2">Secure checkout with multiple payment options</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                      <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/books">
+                                        <i class="fas fa-book"></i> Browse Books
+                                      </a>
+                                      <p class="small text-muted mt-2">Your cart is empty</p>
+                                    </c:otherwise>
+                                  </c:choose>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                      <c:if test="${totalQuantity ne 0}"><a class="btn btn-success"
-                          href="${pageContext.request.contextPath}/customers/cart/pay">Proceed to Pay</a></c:if>
-                      <c:if test="${totalQuantity eq 0}"><a class="btn btn-success"
-                          href="${pageContext.request.contextPath}/books">View Books</a></c:if>
-                    </h6>
                   </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -437,7 +467,74 @@
 
           <!-- Page level custom scripts -->
           <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+          
+          <!-- Toast Notifications -->
+          <script src="${pageContext.request.contextPath}/js/toast-notifications.js"></script>
 
-        </body>
+          <!-- Cart Page Custom Styles -->
+          <style>
+            .cart-item {
+              transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            
+            .cart-item:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+            }
+            
+            .cart-book-image img {
+              border: 2px solid #e3e6f0;
+              transition: transform 0.2s ease;
+            }
+            
+            .cart-item:hover .cart-book-image img {
+              transform: scale(1.05);
+            }
+            
+            .badge-lg {
+              font-size: 0.9em;
+              padding: 6px 12px;
+            }
+            
+            .cart-summary {
+              margin-top: 2rem;
+              border-top: 3px solid #4e73df;
+            }
+            
+            @media (max-width: 768px) {
+              .cart-item .row > div {
+                margin-bottom: 1rem;
+              }
+              
+              .cart-book-image {
+                margin-bottom: 1rem;
+              }
+            }
+          </style>
+        
+        <script>
+          $(document).ready(function() {
+            // Show message from server as toast
+            <c:if test="${message != null}">
+              Toast.success('${message}');
+            </c:if>
+            
+            // Handle remove from cart
+            $('.remove-cart-item').on('click', function(e) {
+              const bookName = $(this).data('book-name');
+              setTimeout(function() {
+                Toast.warning('Book: "' + bookName + '" removed from cart!');
+              }, 100);
+            });
+            
+            // Show cart loaded message
+            const itemCount = ${shoppingItems.size()};
+            if (itemCount > 0) {
+              Toast.info('You have ' + itemCount + ' item(s) in your cart');
+            }
+          });
+        </script>
+
+      </body>
 
         </html>

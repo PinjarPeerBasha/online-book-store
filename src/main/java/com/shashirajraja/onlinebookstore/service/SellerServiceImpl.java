@@ -51,6 +51,12 @@ public class SellerServiceImpl implements SellerService {
 
 	@Override
 	@Transactional
+	public Seller findByUsername(String username) {
+		return getSeller(username);
+	}
+
+	@Override
+	@Transactional
 	public String saveSeller(Seller theSeller) {
 		theSellerRepository.save(theSeller);
 		return "Data Saved Successfully!";

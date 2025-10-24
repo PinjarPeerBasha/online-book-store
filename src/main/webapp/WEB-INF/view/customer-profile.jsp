@@ -8,7 +8,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Seller Profile - Online Book Store</title>
+<title>Customer Profile - Online Book Store</title>
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" 
@@ -16,7 +16,7 @@
 
 <style>
     body {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         padding-top: 20px;
     }
@@ -27,7 +27,7 @@
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         padding: 30px;
         margin: 20px auto;
-        max-width: 900px;
+        max-width: 800px;
     }
     
     .profile-header {
@@ -42,7 +42,7 @@
         height: 120px;
         border-radius: 50%;
         object-fit: cover;
-        border: 4px solid #28a745;
+        border: 4px solid #667eea;
         margin-bottom: 20px;
     }
     
@@ -50,7 +50,7 @@
         width: 120px;
         height: 120px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: linear-gradient(135deg, #667eea, #764ba2);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -73,12 +73,12 @@
     }
     
     .form-control:focus {
-        border-color: #28a745;
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
     
-    .btn-success {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
         border-radius: 8px;
         padding: 12px 30px;
@@ -86,9 +86,9 @@
         transition: all 0.3s ease;
     }
     
-    .btn-success:hover {
+    .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
     }
     
     .btn-secondary {
@@ -103,22 +103,14 @@
     }
     
     .custom-file-label::after {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
         color: white;
     }
     
     .custom-file-input:focus ~ .custom-file-label {
-        border-color: #28a745;
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-    }
-    
-    .business-section {
-        background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 100%);
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px 0;
-        border-left: 4px solid #28a745;
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
 </style>
 </head>
@@ -127,27 +119,27 @@
     <div class="container">
         <div class="profile-container">
             <div class="profile-header">
-                <h2 class="text-success">
-                    <i class="fas fa-store"></i> Seller Profile
+                <h2 class="text-primary">
+                    <i class="fas fa-user-circle"></i> Customer Profile
                 </h2>
                 
                 <!-- Display Profile Photo -->
                 <div class="text-center">
                     <c:choose>
-                        <c:when test="${not empty seller.profilePhotoPath}">
-                            <img src="${pageContext.request.contextPath}/files/profile-photo/${seller.profilePhotoPath}" 
+                        <c:when test="${not empty customer.profilePhotoPath}">
+                            <img src="${pageContext.request.contextPath}/files/profile-photo/${customer.profilePhotoPath}" 
                                  alt="Profile Photo" class="profile-photo">
                         </c:when>
                         <c:otherwise>
                             <div class="profile-photo-placeholder">
-                                <i class="fas fa-store"></i>
+                                <i class="fas fa-user"></i>
                             </div>
                         </c:otherwise>
                     </c:choose>
                 </div>
                 
-                <h4 class="text-muted">${seller.firstName} ${seller.lastName}</h4>
-                <p class="text-muted">@${seller.username} | ${seller.businessName}</p>
+                <h4 class="text-muted">${customer.firstName} ${customer.lastName}</h4>
+                <p class="text-muted">@${customer.username}</p>
             </div>
             
             <!-- Success/Error Messages -->
@@ -170,7 +162,7 @@
             </c:if>
             
             <!-- Profile Update Form -->
-            <form action="${pageContext.request.contextPath}/profile/seller/update" 
+            <form action="${pageContext.request.contextPath}/profile/customer/update" 
                   method="post" enctype="multipart/form-data">
                 
                 <div class="row">
@@ -178,7 +170,7 @@
                         <div class="form-group">
                             <label for="firstName">First Name *</label>
                             <input type="text" class="form-control" name="firstName" 
-                                   value="${seller.firstName}" required maxlength="50">
+                                   value="${customer.firstName}" required maxlength="50">
                         </div>
                     </div>
                     
@@ -186,7 +178,7 @@
                         <div class="form-group">
                             <label for="lastName">Last Name *</label>
                             <input type="text" class="form-control" name="lastName" 
-                                   value="${seller.lastName}" required maxlength="50">
+                                   value="${customer.lastName}" required maxlength="50">
                         </div>
                     </div>
                 </div>
@@ -194,7 +186,7 @@
                 <div class="form-group">
                     <label for="newUsername">Username *</label>
                     <input type="text" class="form-control" name="newUsername" 
-                           value="${seller.username}" required maxlength="30"
+                           value="${customer.username}" required maxlength="30"
                            pattern="[a-zA-Z0-9_]+" 
                            title="Username can only contain letters, numbers, and underscores">
                     <small class="form-text text-muted">
@@ -203,50 +195,22 @@
                     </small>
                 </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" class="form-control" name="email" 
-                                   value="${seller.email}" required maxlength="100">
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="mobile">Mobile *</label>
-                            <input type="tel" class="form-control" name="mobile" 
-                                   value="${seller.mobile}" required
-                                   pattern="[0-9]{10,12}" title="Please enter a valid 10-12 digit mobile number">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" class="form-control" name="email" 
+                           value="${customer.email}" required maxlength="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="mobile">Mobile *</label>
+                    <input type="tel" class="form-control" name="mobile" 
+                           value="${customer.mobile}" required
+                           pattern="[0-9]{10,12}" title="Please enter a valid 10-12 digit mobile number">
                 </div>
                 
                 <div class="form-group">
                     <label for="address">Address *</label>
-                    <textarea class="form-control" name="address" rows="3" required maxlength="500">${seller.address}</textarea>
-                </div>
-                
-                <!-- Business Information Section -->
-                <div class="business-section">
-                    <h5 class="text-success mb-3">
-                        <i class="fas fa-building"></i> Business Information
-                    </h5>
-                    
-                    <div class="form-group">
-                        <label for="businessName">Business Name *</label>
-                        <input type="text" class="form-control" name="businessName" 
-                               value="${seller.businessName}" required maxlength="100">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="businessDescription">Business Description *</label>
-                        <textarea class="form-control" name="businessDescription" rows="4" 
-                                  required maxlength="1000">${seller.businessDescription}</textarea>
-                        <small class="form-text text-muted">
-                            Describe your business, products, and services (max 1000 characters)
-                        </small>
-                    </div>
+                    <textarea class="form-control" name="address" rows="3" required maxlength="500">${customer.address}</textarea>
                 </div>
                 
                 <div class="form-group">
@@ -263,11 +227,11 @@
                 </div>
                 
                 <div class="form-group text-center">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Update Profile
                     </button>
-                    <a href="${pageContext.request.contextPath}/seller" class="btn btn-secondary ml-3">
-                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    <a href="${pageContext.request.contextPath}/customer/books" class="btn btn-secondary ml-3">
+                        <i class="fas fa-arrow-left"></i> Back to Books
                     </a>
                 </div>
             </form>

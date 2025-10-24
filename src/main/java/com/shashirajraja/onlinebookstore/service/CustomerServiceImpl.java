@@ -54,6 +54,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	@Transactional
+	public Customer findByUsername(String username) {
+		return getCustomer(username);
+	}
+
+	@Override
+	@Transactional
 	public String saveCustomer(Customer theCustomer) {
 		
 		theCustomerRepository.save(theCustomer);

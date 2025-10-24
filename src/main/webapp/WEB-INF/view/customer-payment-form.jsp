@@ -343,9 +343,9 @@
                             <div class="card bg-light">
                               <div class="card-body">
                                 <h6><i class="fas fa-info-circle text-success"></i> Cash on Delivery Selected</h6>
-                                <p class="mb-1">• Pay cash when your order is delivered</p>
-                                <p class="mb-1">• No additional charges</p>
-                                <p class="mb-0">• Make sure to have exact change ready</p>
+                                <p class="mb-1"><i class="fas fa-check text-success"></i> Pay cash when your order is delivered</p>
+                                <p class="mb-1"><i class="fas fa-check text-success"></i> No additional charges</p>
+                                <p class="mb-0"><i class="fas fa-check text-success"></i> Make sure to have exact change ready</p>
                               </div>
                             </div>
                           </div>

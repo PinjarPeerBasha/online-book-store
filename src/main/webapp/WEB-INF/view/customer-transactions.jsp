@@ -287,42 +287,82 @@
                       </div>
                     </c:if>
                     <div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                          <thead>
-                            <tr>
-                              <th>Transaction Id</th>
-                              <th>Date</th>
-                              <th>Action</th>
-
-                            </tr>
-                          </thead>
-
-                          <tbody>
-                            <c:forEach var="history" items="${purchaseHistories}">
-                              <!--URL to view details options  -->
-                              <c:url var="purchaseDetailLink" value="/customers/transactions/detail">
-                                <c:param name="transId" value="${history.id}" />
-                              </c:url>
-                              <tr>
-                                <td>
-                                  <c:out value="${history.id}" />
-                                </td>
-                                <td>
-                                  <c:out value="${history.date}" />
-                                </td>
-
-                                <td>
-                                  <form:form action="${pageContext.request.contextPath}/customers/transactions/detail"
-                                    method="post">
+                      <!-- Modern Transaction Cards Layout -->
+                      <div class="transactions-container">
+                        <c:forEach var="history" items="${purchaseHistories}">
+                          <c:url var="purchaseDetailLink" value="/customers/transactions/detail">
+                            <c:param name="transId" value="${history.id}" />
+                          </c:url>
+                          
+                          <div class="transaction-card card shadow-sm mb-3">
+                            <div class="card-body">
+                              <div class="row align-items-center">
+                                <!-- Transaction Info -->
+                                <div class="col-md-3">
+                                  <h6 class="font-weight-bold mb-1">
+                                    <i class="fas fa-receipt text-primary"></i> 
+                                    Transaction #${history.id}
+                                  </h6>
+                                  <p class="text-muted small mb-0">
+                                    <i class="fas fa-calendar"></i> ${history.date}
+                                  </p>
+                                </div>
+                                
+                                <!-- Payment Method -->
+                                <div class="col-md-3">
+                                  <p class="mb-1 small text-muted">Payment Method</p>
+                                  <c:choose>
+                                    <c:when test="${history.paymentMethod != null && history.paymentMethod == 'cod'}">
+                                      <span class="badge badge-warning">
+                                        <i class="fas fa-truck"></i> Cash on Delivery
+                                      </span>
+                                    </c:when>
+                                    <c:when test="${history.paymentMethod != null && history.paymentMethod == 'upi'}">
+                                      <span class="badge badge-primary">
+                                        <i class="fas fa-mobile-alt"></i> UPI Payment
+                                      </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                      <span class="badge badge-secondary">
+                                        <i class="fas fa-credit-card"></i> Online Payment
+                                      </span>
+                                    </c:otherwise>
+                                  </c:choose>
+                                </div>
+                                
+                                <!-- Transaction Status -->
+                                <div class="col-md-3">
+                                  <p class="mb-1 small text-muted">Status</p>
+                                  <span class="badge badge-success">
+                                    <i class="fas fa-check-circle"></i> Completed
+                                  </span>
+                                </div>
+                                
+                                <!-- Action -->
+                                <div class="col-md-3 text-right">
+                                  <form action="${pageContext.request.contextPath}/customers/transactions/detail" method="post" style="display: inline;">
                                     <input type="hidden" name="transId" value="${history.id}" />
-                                    <input type="submit" class="btn btn-success" value="View Detail" />
-                                  </form:form>
-                                </td>
-                              </tr>
-                            </c:forEach>
-                          </tbody>
-                        </table>
+                                    <button type="submit" class="btn btn-outline-primary">
+                                      <i class="fas fa-eye"></i> View Details
+                                    </button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </c:forEach>
+                        
+                        <!-- Empty State -->
+                        <c:if test="${empty purchaseHistories}">
+                          <div class="text-center py-5">
+                            <i class="fas fa-history fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">No Transaction History</h4>
+                            <p class="text-muted">You haven't made any purchases yet.</p>
+                            <a href="${pageContext.request.contextPath}/books" class="btn btn-primary">
+                              <i class="fas fa-shopping-cart"></i> Start Shopping
+                            </a>
+                          </div>
+                        </c:if>
                       </div>
                     </div>
                   </div>
