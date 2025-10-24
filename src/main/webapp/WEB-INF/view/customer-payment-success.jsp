@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -6,7 +6,7 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
   <title>Payment History - Online Book Store</title>
@@ -228,10 +228,10 @@
                       <c:forEach var="history" items="${purchaseHistories}">
                         <tr>
                           <td>
-                            <span class="badge badge-primary">${history.transactionId}</span>
+                            <span class="badge badge-primary">${history.id}</span>
                           </td>
                           <td>
-                            <fmt:formatDate value="${history.purchaseDate}" pattern="MMM dd, yyyy" />
+                            <fmt:formatDate value="${history.date}" pattern="MMM dd, yyyy" />
                           </td>
                           <td>
                             <c:set var="itemCount" value="${history.purchaseDetails.size()}" />
@@ -264,7 +264,7 @@
                           </td>
                           <td>
                             <form action="${pageContext.request.contextPath}/customers/transactions/detail" method="POST" style="display: inline;">
-                              <input type="hidden" name="transId" value="${history.transactionId}">
+                              <input type="hidden" name="transId" value="${history.id}">
                               <button type="submit" class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-eye"></i> View Details
                               </button>

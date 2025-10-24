@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
   <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
   <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -7,7 +7,7 @@
 
         <head>
 
-          <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
           <title>Online Book Store</title>
@@ -516,24 +516,23 @@
         
         <script>
           $(document).ready(function() {
-            // Show message from server as toast
+            // Show message from server as toast (this comes after page reload)
             <c:if test="${message != null}">
-              Toast.success('${message}');
+              Toast.warning('${message}');
             </c:if>
             
-            // Handle remove from cart
-            $('.remove-cart-item').on('click', function(e) {
-              const bookName = $(this).data('book-name');
-              setTimeout(function() {
-                Toast.warning('Book: "' + bookName + '" removed from cart!');
-              }, 100);
-            });
+            // DON'T show toast on click - let the server message handle it after reload
+            // The remove button will navigate to the server, which will show the message
             
-            // Show cart loaded message
-            const itemCount = ${shoppingItems.size()};
-            if (itemCount > 0) {
-              Toast.info('You have ' + itemCount + ' item(s) in your cart');
-            }
+            // Show cart loaded message only if no server message
+            <c:if test="${message == null}">
+              const itemCount = ${shoppingItems.size()};
+              if (itemCount > 0) {
+                Toast.info('You have ' + itemCount + ' item(s) in your cart');
+              } else {
+                Toast.info('Your cart is empty');
+              }
+            </c:if>
           });
         </script>
 

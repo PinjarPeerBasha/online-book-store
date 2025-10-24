@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
   <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
   <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -7,7 +7,7 @@
 
         <head>
 
-          <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
           <title>Online Book Store</title>
@@ -588,21 +588,8 @@
               Toast.success('${message}');
             </c:if>
             
-            // Handle add to cart with toast
-            $('.add-to-cart-btn').on('click', function(e) {
-              const bookName = $(this).data('book-name');
-              setTimeout(function() {
-                Toast.success('Book: "' + bookName + '" added to cart!');
-              }, 100);
-            });
-            
-            // Handle remove from cart with toast
-            $('.remove-from-cart-btn').on('click', function(e) {
-              const bookName = $(this).data('book-name');
-              setTimeout(function() {
-                Toast.warning('Book: "' + bookName + '" removed from cart!');
-              }, 100);
-            });
+            // DON'T show toast on button click - the page will reload and show server message
+            // This prevents duplicate toasts
               // Search functionality
               $('#searchBooks').on('keyup', function() {
                 var searchTerm = $(this).val().toLowerCase();
